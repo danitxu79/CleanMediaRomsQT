@@ -12,3 +12,6 @@ Esta versión gráfica ya no hace falta copiarla a la carpeta del emulador, se p
 
 # Archivos compilados
 https://github.com/danitxu79/CleanMediaRoms/releases
+
+# Versión para consola
+https://github.com/danitxu79/CleanMediaRoms
