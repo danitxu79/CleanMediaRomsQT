@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtWidgets
-from interface_ui import Ui_CleanMediaInterface
-from interface_ui import *
+from PyQt5 import QtWidgets, uic
+# from interface_ui import Ui_CleanMediaInterface
+# from interface_ui import *
 import sys
 import os
 from os import remove
@@ -15,41 +15,58 @@ from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QDialog,
                              QMessageBox)
 from PyQt5.QtWidgets import QProgressBar
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton
+from PyQt5.QtWidgets import QMainWindow
 from clear_screen import clear
 from colorama import Fore, Back, Style
 from colorama import init, AnsiToWin32
+import threading
+
 stream = AnsiToWin32(sys.stderr).stream
 init()
 init(autoreset=True)
 init(wrap=False)
 
+LimiteBarra = 0
+directory = ""
+fileXML = ""
+archivoProcesado = ""
 
-class mywindow(QtWidgets.QMainWindow):
+qtCreatorFile = "CleanMediaUI.ui"  # Nombre del archivo UI aquí.
+# qtCreatorFile = "interface.ui"  # Nombre del archivo UI aquí.
 
-    def __init__(self):
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)  # El modulo ui carga el archivo
 
-        super(mywindow, self).__init__()
 
-        self.ui = Ui_CleanMediaInterface()
+class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
-        self.ui.setupUi(self)
+    def __init__(self):  # Constructor de la clase
 
-        self.ui.ButtonComenzar.clicked.connect(self.btnClicked)
+        # super(mywindow, self).__init__()
+        QtWidgets.QMainWindow.__init__(self)  # Constructor
+        Ui_MainWindow.__init__(self)  # Constructor
+        self.setupUi(self)  # Método Constructor de la ventana
 
-        self.ui.ButtonXML.clicked.connect(self.btnClickedXML)
+#        self.ui = Ui_CleanMediaInterface()
+#
+#        self.setupUi(self)
 
-        self.ui.ButtonRom.clicked.connect(self.btnClickedRom)
+        self.pushButtonComenzar.clicked.connect(self.btnClicked)
+
+        self.pushButtonXML.clicked.connect(self.btnClickedXML)
+
+        self.pushButtonRom.clicked.connect(self.btnClickedRom)
 
         self.radio_value()
-        self.ui.radioButtonBorrar.clicked.connect(self.radio_value)
-        self.ui.radioButtonMover.clicked.connect(self.radio_value)
+        self.radioButtonBorrar.clicked.connect(self.radio_value)
+        self.radioButtonMover.clicked.connect(self.radio_value)
 
-        self.ui.progressBar.setValue(100)
-        self.ui.ButtonInfo.clicked.connect(self.btnClickedInfo)
+        self.progressBar.setValue(LimiteBarra)
+        self.pushButtonInfo.clicked.connect(self.btnClickedInfo)
+        #self.progressBar = QProgressBar(self)
+        self.progressBar.setMaximum(100)
+        self.show()
 
     def btnClickedInfo(self):
-
         QMessageBox.about(self, "Info",
                           """
      Limpia archivos obsoletos de los directorios "media" dentro de la
@@ -66,40 +83,52 @@ class mywindow(QtWidgets.QMainWindow):
      """)
 
     def radio_value(self):
-        if self.ui.radioButtonMover.isChecked():
-            self.ui.label.setText("Mover archivos al directorio Backup")
-        elif self.ui.radioButtonBorrar.isChecked():
-            self.ui.label.setText("Borrar archivos media no utilizados")
-        else:
-            self.ui.label.setText(
-                    "No ha seleccionado ninguna opción de archivos")
+        if self.radioButtonMover.isChecked():
+            self.labelOpcion.setText("Mover archivos al directorio Backup")
+        elif self.radioButtonBorrar.isChecked():
+            self.labelOpcion.setText("Borrar archivos media no utilizados")
 
     def btnClickedRom(self):
+        global directory
 
         directory = str(QFileDialog.getExistingDirectory(self,
-                                                         "Select Directory"))
+                                                         "Selecciona el directorio media"))
         if directory:
             # print("Directorio seleccionado: ", directory)
-            self.ui.LabelROM.setText(directory)
+            self.labelROM.setText(directory)
 
     def btnClickedXML(self):
+        global fileXML
 
-        file, _ = QFileDialog.getOpenFileName(self,
-                                              'Buscar Archivo', QDir.homePath(),
-                                              "ARCHIVOS .XML (*);;XML Files(*.xml)")
-        if file:
+        fileXML, _ = QFileDialog.getOpenFileName(self,
+                                              'Selecciona el archivo .xml', os.getcwd(),
+                                              "Archivos .XML (*.xml);;Todos los archivos(*.*)")
+        # QDir.homePath(),
+        if fileXML:
             # print("Archivo seleccionado: ", file)
-            self.ui.LabelXML.setText(file)
+            self.labelXML.setText(fileXML)
 
     def btnClicked(self):
+        self.pushButtonComenzar.setEnabled(False)
 
+        #Escaneo()
+        iniciar=threading.Thread(name='Escaneo', target=Escaneo)
+
+        iniciar.start()
+
+        self.pushButtonComenzar.setEnabled(True)
+
+
+def Escaneo():
+
+        global LimiteBarra
         ruta_app = os.getcwd()
         total = 0
         num_archivos = 0
         linea = '-' * 120
         todos_directorios = []
         todos_archivos = []
-        ruta_xml = ruta_app + '\\roms\\gamelist.xml'
+        ruta_xml = fileXML  # ruta_app + '\\roms\\gamelist.xml'
         ruta_roms = ruta_app + '\\roms'
 
         clear()
@@ -120,10 +149,14 @@ class mywindow(QtWidgets.QMainWindow):
 
         # sleep(5)
 
-        for ruta, directorios, archivos in os.walk(ruta_roms, topdown=True):
+        for ruta, directorios, archivos in os.walk(directory, topdown=True):
             print(Back.BLUE + Style.BRIGHT + '\nRuta       :',
                   Back.BLUE + Style.BRIGHT + ruta)
             print('\n')
+            print(Back.BLUE + Style.BRIGHT + '\nArchivo xml       :',
+                  Back.BLUE + Style.BRIGHT + fileXML)
+            print('\n')
+
             sleep(2)
             for elemento in archivos:
                 num_archivos += 1
@@ -143,6 +176,8 @@ class mywindow(QtWidgets.QMainWindow):
                           "ENCONTRADO ARCHIVO MULTIMEDIA")
                     todos_directorios.append(ruta)
                     todos_archivos.append(elemento)
+                    LimiteBarra = num_archivos
+        print(LimiteBarra)
 
         print(linea)
         print(Back.BLACK + Fore.BLUE + Style.BRIGHT +
@@ -181,6 +216,7 @@ class mywindow(QtWidgets.QMainWindow):
         total_archivos_borrados = 0
         pesototal = 0
 
+        LimiteBarra = 50
         for file in todos_archivos:
             correcto = 0
             with open(ruta_xml, "r", encoding="utf8") as fichero_xml:
@@ -244,84 +280,18 @@ class mywindow(QtWidgets.QMainWindow):
 
 
 
-class Downloader(QThread):
-    # Señal para que la ventana establezca el valor máximo
-    # de la barra de progreso.
-    setTotalProgress = pyqtSignal(int)
-    # Señal para aumentar el progreso.
-    setCurrentProgress = pyqtSignal(int)
-    # Señal para indicar que el archivo se descargó correctamente.
-    succeeded = pyqtSignal()
-    def __init__(self, url, filename):
-        super().__init__()
-        self._url = url
-        self._filename = filename
-    def run(self):
-        url = "https://www.python.org/ftp/python/3.7.2/python-3.7.2.exe"
-        filename = "python-3.7.2.exe"
-        readBytes = 0
-        chunkSize = 1024
-        # Abrir la dirección de URL.
-        with urlopen(url) as r:
-            # Avisar a la ventana cuántos bytes serán descargados.
-            self.setTotalProgress.emit(int(r.info()["Content-Length"]))
-            with open(filename, "ab") as f:
-                while True:
-                    # Leer una porción del archivo que estamos descargando.
-                    chunk = r.read(chunkSize)
-                    # Si el resultado es `None` quiere decir que todavía
-                    # no se han descargado los datos. Simplemente
-                    # seguimos esperando.
-                    if chunk is None:
-                        continue
-                    # Si el resultado es una instancia de `bytes` vacía
-                    # quiere decir que el archivo está completo.
-                    elif chunk == b"":
-                        break
-                    # Escribir la porción descargada en el archivo local.
-                    f.write(chunk)
-                    readBytes += chunkSize
-                    # Avisar a la ventana la cantidad de bytes recibidos.
-                self.setCurrentProgress.emit(readBytes)
-                self.succeeded.emit()
 
-    def initDownload(self):
-        self.label.setText("Descargando archivo...")
-        # Deshabilitar el botón mientras se descarga el archivo.
-        self.button.setEnabled(False)
-        # Ejecutar la descarga en un nuevo hilo.
-        self.downloader = Downloader(
-            "https://www.python.org/ftp/python/3.7.2/python-3.7.2.exe",
-            "python-3.7.2.exe"
-        )
-        # Conectar las señales que indican el progreso de la descarga
-        # con los métodos correspondientes de la barra de progreso.
-        self.downloader.setTotalProgress.connect(self.progressBar.setMaximum)
-        self.downloader.setCurrentProgress.connect(self.progressBar.setValue)
-        # Qt invocará el método `succeeded` cuando el archivo se haya
-        # descargado correctamente y `downloadFinished()` cuando el hilo
-        # haya terminado.
-        self.downloader.succeeded.connect(self.downloadSucceeded)
-        self.downloader.finished.connect(self.downloadFinished)
-        self.downloader.start()
-
-    def downloadSucceeded(self):
-        # Establecer el progreso en 100%.
-        self.progressBar.setValue(self.progressBar.maximum())
-        self.label.setText("¡El archivo se ha descargado!")
-
-    def downloadFinished(self):
-        # Restablecer el botón.
-        self.button.setEnabled(True)
-        # Eliminar el hilo una vez que fue utilizado.
+if __name__ == "__main__":
+    app =  QtWidgets.QApplication(sys.argv)
+    window = mywindow()
+    window.show()
+    sys.exit(app.exec_())
 
 
-
-
-app = QtWidgets.QApplication([])
-
-application = mywindow()
-
-application.show()
-
-sys.exit(app.exec())
+#app = QtWidgets.QApplication([])
+#
+#application = mywindow()
+#
+#application.show()
+#
+#sys.exit(app.exec_())
