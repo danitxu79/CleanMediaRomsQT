@@ -30,6 +30,14 @@ LimiteBarra = 0
 directory = ""
 fileXML = ""
 archivoProcesado = ""
+total = 0
+num_archivos = 0
+linea = '-' * 120
+todos_directorios = []
+todos_archivos = []
+ruta_xml = ""
+diccionario = ""
+halistado = False
 
 qtCreatorFile = "CleanMediaUI.ui"  # Nombre del archivo UI aquí.
 
@@ -37,7 +45,6 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)  # El modulo ui carga
 
 
 class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
-    global LimiteBarra
 
     def __init__(self):  # Constructor de la clase
 
@@ -47,7 +54,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)  # Método Constructor de la ventana
 
         self.pushButtonComenzar.clicked.connect(self.initBusqueda)
-
+        self.pushButtonEjecutar.clicked.connect(self.initEjecutar)
         self.pushButtonXML.clicked.connect(self.btnClickedXML)
 
         self.pushButtonRom.clicked.connect(self.btnClickedRom)
@@ -58,17 +65,55 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.pushButtonInfo.clicked.connect(self.btnClickedInfo)
         self.progressBar = self.progressBar2
+        # self.labelArchivoProcesado2 = self.labelArchivoProcesado
+        self.listWidget2 = self.listWidget
         self.show()
+
+    def initEjecutar(self):
+        global halistado
+        if halistado is True:
+            # Deshabilitar el botón mientras se descarga el archivo.
+            self.pushButtonEjecutar.setEnabled(False)
+            self.pushButtonComenzar.setEnabled(False)
+            # Ejecutar la descarga en un nuevo hilo.
+            self.ejecutar = Ejecutar()
+            # Conectar las señales que indican el progreso de la descarga
+            # con los métodos correspondientes de la barra de progreso.
+            self.ejecutar.setTotalProgress.connect(self.progressBar.setMaximum)
+            self.ejecutar.setCurrentProgress.connect(self.progressBar.setValue)
+            # self.ejecutar.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
+            self.ejecutar.setListWidgetFile.connect(self.listWidget2.addItem)
+            # Qt invocará el método `succeeded` cuando el archivo se haya
+            # descargado correctamente y `downloadFinished()` cuando el hilo
+            # haya terminado.
+            self.ejecutar.succeeded.connect(self.ejecutarSucceeded)
+            self.ejecutar.finished.connect(self.ejecutarFinished)
+            self.ejecutar.start()
+
+    def ejecutarSucceeded(self):
+        # Establecer el progreso en 100%.
+        self.progressBar.setValue(self.progressBar.maximum())
+        # self.labelArchivoProcesado2.setText("Terminado")
+
+    def ejecutarFinished(self):
+        # Restablecer el botón.
+        self.pushButtonEjecutar.setEnabled(True)
+        self.pushButtonComenzar.setEnabled(True)
+        # Eliminar el hilo una vez que fue utilizado.
+        del self.ejecutar
 
     def initBusqueda(self):
         # Deshabilitar el botón mientras se descarga el archivo.
         self.pushButtonComenzar.setEnabled(False)
+        self.pushButtonEjecutar.setEnabled(False)
         # Ejecutar la descarga en un nuevo hilo.
         self.busqueda = Busqueda()
         # Conectar las señales que indican el progreso de la descarga
         # con los métodos correspondientes de la barra de progreso.
         self.busqueda.setTotalProgress.connect(self.progressBar.setMaximum)
         self.busqueda.setCurrentProgress.connect(self.progressBar.setValue)
+        # self.busqueda.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
+        self.busqueda.setListWidgetFile.connect(self.listWidget2.addItem)
         # Qt invocará el método `succeeded` cuando el archivo se haya
         # descargado correctamente y `downloadFinished()` cuando el hilo
         # haya terminado.
@@ -77,12 +122,16 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.busqueda.start()
 
     def busquedaSucceeded(self):
+        global halistado
         # Establecer el progreso en 100%.
         self.progressBar.setValue(self.progressBar.maximum())
+        halistado = True
+        # self.labelArchivoProcesado2.setText("Terminado")
 
     def busquedaFinished(self):
         # Restablecer el botón.
         self.pushButtonComenzar.setEnabled(True)
+        self.pushButtonEjecutar.setEnabled(True)
         # Eliminar el hilo una vez que fue utilizado.
         del self.busqueda
 
@@ -128,6 +177,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # print("Archivo seleccionado: ", file)
             self.labelXML.setText(fileXML)
 
+
 class Busqueda(QThread):
     # Señal para que la ventana establezca el valor máximo
     # de la barra de progreso.
@@ -136,20 +186,16 @@ class Busqueda(QThread):
     setCurrentProgress = pyqtSignal(int)
     # Señal para indicar que el archivo se descargó correctamente.
     succeeded = pyqtSignal()
+    # setLabelArchivoProcesado = pyqtSignal(str)
+    setListWidgetFile = pyqtSignal(str)
 
     def __init__(self):
         super().__init__()
 
     def run(self):
-        global LimiteBarra
-
-        total = 0
-        num_archivos = 0
-        linea = '-' * 120
-        todos_directorios = []
-        todos_archivos = []
-        ruta_xml = fileXML  # ruta_app + '\\roms\\gamelist.xml'
-
+        global LimiteBarra, total, num_archivos, linea, todos_directorios
+        global todos_archivos, ruta_xml, diccionario
+        ruta_xml = fileXML
         clear()
         print(Back.BLUE + Fore.WHITE + Style.BRIGHT + f"""\n
 
@@ -199,6 +245,8 @@ class Busqueda(QThread):
                     LimiteBarra = len(archivos)
                     self.setTotalProgress.emit(int(LimiteBarra))
                     self.setCurrentProgress.emit(int(actual))
+                    # setLabelArchivoProcesado.emit(str(elemento))
+                    self.setListWidgetFile.emit(str(elemento))
                     actual += 1
 
         print(linea)
@@ -223,11 +271,35 @@ class Busqueda(QThread):
         if num_archivos == 0:
             # sys.exit()
             return
+
+        self.succeeded.emit()
+
+
+class Ejecutar(QThread):
+    # Señal para que la ventana establezca el valor máximo
+    # de la barra de progreso.
+    setTotalProgress = pyqtSignal(int)
+    # Señal para aumentar el progreso.
+    setCurrentProgress = pyqtSignal(int)
+    # Señal para indicar que el archivo se descargó correctamente.
+    succeeded = pyqtSignal()
+    # setLabelArchivoProcesado = pyqtSignal(str)
+    setListWidgetFile = pyqtSignal(str)
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        global LimiteBarra, total, num_archivos, linea, todos_directorios
+        global todos_archivos, ruta_xml, diccionario, total
+        ruta_xml = fileXML
+
         print("\n")
         print(linea)
         print("\n")
         sleep(5)
         clear()
+
 
         diccionario_archivos = diccionario.values()
         diccionario_directorios = diccionario.keys()
@@ -302,10 +374,8 @@ class Busqueda(QThread):
         self.succeeded.emit()
 
 
-
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     window = mywindow()
     window.show()
     sys.exit(app.exec_())
-
