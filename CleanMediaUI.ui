@@ -441,7 +441,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QProgressBar" name="progressBar">
+          <widget class="QProgressBar" name="progressBar2">
            <property name="minimumSize">
             <size>
              <width>800</width>

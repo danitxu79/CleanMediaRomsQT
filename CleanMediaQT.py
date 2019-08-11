@@ -32,12 +32,12 @@ fileXML = ""
 archivoProcesado = ""
 
 qtCreatorFile = "CleanMediaUI.ui"  # Nombre del archivo UI aquí.
-# qtCreatorFile = "interface.ui"  # Nombre del archivo UI aquí.
 
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)  # El modulo ui carga el archivo
 
 
 class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
+    global LimiteBarra
 
     def __init__(self):  # Constructor de la clase
 
@@ -46,11 +46,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)  # Constructor
         self.setupUi(self)  # Método Constructor de la ventana
 
-#        self.ui = Ui_CleanMediaInterface()
-#
-#        self.setupUi(self)
-
-        self.pushButtonComenzar.clicked.connect(self.btnClicked)
+        self.pushButtonComenzar.clicked.connect(self.initBusqueda)
 
         self.pushButtonXML.clicked.connect(self.btnClickedXML)
 
@@ -60,11 +56,35 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.radioButtonBorrar.clicked.connect(self.radio_value)
         self.radioButtonMover.clicked.connect(self.radio_value)
 
-        self.progressBar.setValue(LimiteBarra)
         self.pushButtonInfo.clicked.connect(self.btnClickedInfo)
-        #self.progressBar = QProgressBar(self)
-        self.progressBar.setMaximum(100)
+        self.progressBar = self.progressBar2
         self.show()
+
+    def initBusqueda(self):
+        # Deshabilitar el botón mientras se descarga el archivo.
+        self.pushButtonComenzar.setEnabled(False)
+        # Ejecutar la descarga en un nuevo hilo.
+        self.busqueda = Busqueda()
+        # Conectar las señales que indican el progreso de la descarga
+        # con los métodos correspondientes de la barra de progreso.
+        self.busqueda.setTotalProgress.connect(self.progressBar.setMaximum)
+        self.busqueda.setCurrentProgress.connect(self.progressBar.setValue)
+        # Qt invocará el método `succeeded` cuando el archivo se haya
+        # descargado correctamente y `downloadFinished()` cuando el hilo
+        # haya terminado.
+        self.busqueda.succeeded.connect(self.busquedaSucceeded)
+        self.busqueda.finished.connect(self.busquedaFinished)
+        self.busqueda.start()
+
+    def busquedaSucceeded(self):
+        # Establecer el progreso en 100%.
+        self.progressBar.setValue(self.progressBar.maximum())
+
+    def busquedaFinished(self):
+        # Restablecer el botón.
+        self.pushButtonComenzar.setEnabled(True)
+        # Eliminar el hilo una vez que fue utilizado.
+        del self.busqueda
 
     def btnClickedInfo(self):
         QMessageBox.about(self, "Info",
@@ -108,28 +128,27 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # print("Archivo seleccionado: ", file)
             self.labelXML.setText(fileXML)
 
-    def btnClicked(self):
-        self.pushButtonComenzar.setEnabled(False)
+class Busqueda(QThread):
+    # Señal para que la ventana establezca el valor máximo
+    # de la barra de progreso.
+    setTotalProgress = pyqtSignal(int)
+    # Señal para aumentar el progreso.
+    setCurrentProgress = pyqtSignal(int)
+    # Señal para indicar que el archivo se descargó correctamente.
+    succeeded = pyqtSignal()
 
-        #Escaneo()
-        iniciar=threading.Thread(name='Escaneo', target=Escaneo)
+    def __init__(self):
+        super().__init__()
 
-        iniciar.start()
-
-        self.pushButtonComenzar.setEnabled(True)
-
-
-def Escaneo():
-
+    def run(self):
         global LimiteBarra
-        ruta_app = os.getcwd()
+
         total = 0
         num_archivos = 0
         linea = '-' * 120
         todos_directorios = []
         todos_archivos = []
         ruta_xml = fileXML  # ruta_app + '\\roms\\gamelist.xml'
-        ruta_roms = ruta_app + '\\roms'
 
         clear()
         print(Back.BLUE + Fore.WHITE + Style.BRIGHT + f"""\n
@@ -158,6 +177,7 @@ def Escaneo():
             print('\n')
 
             sleep(2)
+            actual = 0
             for elemento in archivos:
                 num_archivos += 1
                 archivo = ruta + os.sep + elemento
@@ -176,8 +196,10 @@ def Escaneo():
                           "ENCONTRADO ARCHIVO MULTIMEDIA")
                     todos_directorios.append(ruta)
                     todos_archivos.append(elemento)
-                    LimiteBarra = num_archivos
-        print(LimiteBarra)
+                    LimiteBarra = len(archivos)
+                    self.setTotalProgress.emit(int(LimiteBarra))
+                    self.setCurrentProgress.emit(int(actual))
+                    actual += 1
 
         print(linea)
         print(Back.BLACK + Fore.BLUE + Style.BRIGHT +
@@ -199,7 +221,8 @@ def Escaneo():
         print(Back.BLACK + Fore.GREEN + Style.BRIGHT +
               "Total archivos multimedia escaneados: ", numero_archivos)
         if num_archivos == 0:
-            sys.exit()
+            # sys.exit()
+            return
         print("\n")
         print(linea)
         print("\n")
@@ -216,7 +239,6 @@ def Escaneo():
         total_archivos_borrados = 0
         pesototal = 0
 
-        LimiteBarra = 50
         for file in todos_archivos:
             correcto = 0
             with open(ruta_xml, "r", encoding="utf8") as fichero_xml:
@@ -277,21 +299,13 @@ def Escaneo():
         peso_kb = round(pesototal/1024)
         peso_Mb = peso_kb / 1000
         print(Back.BLACK + Fore.RED + Style.BRIGHT + 'Total (Mb)   :', peso_Mb)
-
+        self.succeeded.emit()
 
 
 
 if __name__ == "__main__":
-    app =  QtWidgets.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     window = mywindow()
     window.show()
     sys.exit(app.exec_())
 
-
-#app = QtWidgets.QApplication([])
-#
-#application = mywindow()
-#
-#application.show()
-#
-#sys.exit(app.exec_())
