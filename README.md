@@ -11,7 +11,7 @@ Limpia archivos media no utilizados de la carpeta "Roms" de nuestro emulador /  
 Esta versión gráfica ya no hace falta copiarla a la carpeta del emulador, se puede elegir la localización del archivo .xml y de la carpeta media de las roms
 
 # Archivos compilados
-https://github.com/danitxu79/CleanMediaRoms/releases
+https://github.com/danitxu79/CleanMediaRomsQT/releases
 
 # Versión para consola
 https://github.com/danitxu79/CleanMediaRoms
