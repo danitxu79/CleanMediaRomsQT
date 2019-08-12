@@ -1,4 +1,20 @@
 # -*- coding: utf-8 -*-
+# *****************************************************************************
+# *                                                                           *
+# *                                                                           *
+# *      Versión QT de Clean Media Roms                                       *
+# *                                                                           *
+# *      Limpia archivos obsoletos de los directorios "media" dentro de la    *
+# *   carpeta "ROMS", usando el gamelist.txt como guía para saber si se usa   *
+# *   el archivo.                                                             *
+# *                                                                           *
+# *       Versión beta, haz una copia de seguridad antes de usar este programa*
+# *                                                                           *
+# *       CleanMediaQT.py  ver. 1.0                                           *
+# *                                                                           *
+# *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
+# *                                                                           *
+# *****************************************************************************
 
 from PyQt5 import QtWidgets, uic
 # from interface_ui import Ui_CleanMediaInterface
