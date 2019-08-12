@@ -17,8 +17,6 @@
 # *****************************************************************************
 
 from PyQt5 import QtWidgets, uic
-# from interface_ui import Ui_CleanMediaInterface
-# from interface_ui import *
 import sys
 import os
 from os import remove
@@ -51,7 +49,7 @@ linea = '-' * 120
 todos_directorios = []
 todos_archivos = []
 ruta_xml = ""
-diccionario = ""
+diccionario = []
 halistado = False
 ficheroOpcion = 0
 numero_archivos = 0
@@ -145,6 +143,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # haya terminado.
         self.busqueda.succeeded.connect(self.busquedaSucceeded)
         self.busqueda.finished.connect(self.busquedaFinished)
+        self.listWidget2.clear()
         self.busqueda.start()
 
     def busquedaSucceeded(self):
@@ -182,12 +181,14 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.radioButtonMover.isChecked():
             self.labelOpcion.setText("Mover archivos al directorio Backup")
             ficheroOpcion = 2
+            self.pushButtonEjecutar.setText("Mover")
         elif self.radioButtonBorrar.isChecked():
             ficheroOpcion = 1
             self.labelOpcion.setText("Borrar archivos media no utilizados")
+            self.pushButtonEjecutar.setText("Borrar")
 
     def btnClickedRom(self):
-        global directory
+        global directory, fileXML
 
         directory = str(QFileDialog.getExistingDirectory(self,
                                                          "Selecciona el directorio media"))
@@ -196,9 +197,13 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         temp = ""
         temp = directory.replace('/', '\\')
         directory = temp
+        fileXML = directory + os.sep + 'gamelist.xml'
         if directory:
             # print("Directorio seleccionado: ", directory)
             self.labelROM.setText(directory)
+        if fileXML:
+            # print("Archivo seleccionado: ", file)
+            self.labelXML.setText(fileXML)
 
     def btnClickedXML(self):
         global fileXML
@@ -233,6 +238,11 @@ class Busqueda(QThread):
         global todos_archivos, ruta_xml, diccionario, numero_archivos
         ruta_xml = fileXML
         clear()
+        diccionario.clear()
+        todos_archivos.clear()
+        todos_directorios.clear()
+        num_archivos = 0
+        numero_archivos = 0
         print(Back.BLUE + Fore.WHITE + Style.BRIGHT + f"""\n
 
 
@@ -248,8 +258,9 @@ class Busqueda(QThread):
 
         """)
 
-        # (5)
-
+        actual = 0
+        for ruta, directorios, archivos in os.walk(directory, topdown=True):
+            LimiteBarra += len(archivos)
         for ruta, directorios, archivos in os.walk(directory, topdown=True):
             print(Back.BLUE + Style.BRIGHT + '\nRuta       :',
                   Back.BLUE + Style.BRIGHT + ruta)
@@ -258,10 +269,9 @@ class Busqueda(QThread):
                   Back.BLUE + Style.BRIGHT + fileXML)
             print('\n')
 
-            actual = 0
             for elemento in archivos:
                 num_archivos += 1
-                archivo = ruta + '\\' + elemento
+                archivo = ruta + os.sep + elemento
                 estado = os.stat(archivo)
                 tamaño = estado.st_size
                 totaltamaño = 0
@@ -278,8 +288,8 @@ class Busqueda(QThread):
                           "ENCONTRADO ARCHIVO MULTIMEDIA")
                     todos_directorios.append(ruta)
                     todos_archivos.append(elemento)
-                    totalruta = ruta + '\\' + elemento
-                    LimiteBarra = len(archivos)
+                    totalruta = ruta + os.sep + elemento
+                    #LimiteBarra = len(archivos)
                     self.setTotalProgress.emit(int(LimiteBarra))
                     self.setCurrentProgress.emit(int(actual))
                     # setLabelArchivoProcesado.emit(str(elemento))
@@ -342,7 +352,7 @@ class Ejecutar(QThread):
         numero = 0
         archivo_objetivo = diccionario['archivos'][0]
         directorio_objetivo = diccionario['directorios'][0]
-        total = directorio_objetivo + '\\' + archivo_objetivo
+        total = directorio_objetivo + os.sep + archivo_objetivo
         total_archivos_borrados = 0
         pesototal = 0
         LimiteBarra = numero_archivos
@@ -366,7 +376,7 @@ class Ejecutar(QThread):
                               "Archivo correcto:")
                         directorio_objetivo = diccionario['directorios'][numero]
                         archivo_objetivo = diccionario['archivos'][numero]
-                        total = directorio_objetivo + '\\' + archivo_objetivo
+                        total = directorio_objetivo + os.sep + archivo_objetivo
                         print(Back.BLACK + Fore.RED + Style.BRIGHT + "     ",
                               total)
                         if numero < num_archivos:
@@ -379,7 +389,7 @@ class Ejecutar(QThread):
             if correcto == 0:
                 directorio_objetivo = diccionario['directorios'][numero]
                 archivo_objetivo = diccionario['archivos'][numero]
-                total = directorio_objetivo + '\\' + archivo_objetivo
+                total = directorio_objetivo + os.sep + archivo_objetivo
                 # clear()
                 print(linea)
                 print()
@@ -402,13 +412,10 @@ class Ejecutar(QThread):
                 pesototal += tamaño
                 total_archivos_borrados += 1
                 if ficheroOpcion == 1:
-                    #remove(total)
-                    pass
+                    remove(total)
                 else:
                     directorioBackup = directorio_objetivo + os.sep + 'backup'
                     archivoBackup = directorioBackup + os.sep + archivo_objetivo
-                    print(directorioBackup)
-                    print(archivoBackup)
                     if os.path.isdir(directorioBackup):
                         shutil.move(total, archivoBackup)
                     else:
