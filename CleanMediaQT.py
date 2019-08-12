@@ -6,7 +6,6 @@ from PyQt5 import QtWidgets, uic
 import sys
 import os
 from os import remove
-from time import sleep
 from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QDialog,
                              QFileDialog, QGridLayout, QHBoxLayout,
@@ -17,9 +16,9 @@ from PyQt5.QtWidgets import QProgressBar
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow
 from clear_screen import clear
+import shutil
 from colorama import Fore, Back, Style
 from colorama import init, AnsiToWin32
-import threading
 
 stream = AnsiToWin32(sys.stderr).stream
 init()
@@ -38,6 +37,9 @@ todos_archivos = []
 ruta_xml = ""
 diccionario = ""
 halistado = False
+ficheroOpcion = 0
+numero_archivos = 0
+yaborrado = False
 
 qtCreatorFile = "CleanMediaUI.ui"  # Nombre del archivo UI aquí.
 
@@ -47,7 +49,6 @@ Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)  # El modulo ui carga
 class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self):  # Constructor de la clase
-
         # super(mywindow, self).__init__()
         QtWidgets.QMainWindow.__init__(self)  # Constructor
         Ui_MainWindow.__init__(self)  # Constructor
@@ -70,25 +71,32 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.show()
 
     def initEjecutar(self):
-        global halistado
+        global halistado, yaborrado
         if halistado is True:
-            # Deshabilitar el botón mientras se descarga el archivo.
-            self.pushButtonEjecutar.setEnabled(False)
-            self.pushButtonComenzar.setEnabled(False)
-            # Ejecutar la descarga en un nuevo hilo.
-            self.ejecutar = Ejecutar()
-            # Conectar las señales que indican el progreso de la descarga
-            # con los métodos correspondientes de la barra de progreso.
-            self.ejecutar.setTotalProgress.connect(self.progressBar.setMaximum)
-            self.ejecutar.setCurrentProgress.connect(self.progressBar.setValue)
-            # self.ejecutar.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
-            self.ejecutar.setListWidgetFile.connect(self.listWidget2.addItem)
-            # Qt invocará el método `succeeded` cuando el archivo se haya
-            # descargado correctamente y `downloadFinished()` cuando el hilo
-            # haya terminado.
-            self.ejecutar.succeeded.connect(self.ejecutarSucceeded)
-            self.ejecutar.finished.connect(self.ejecutarFinished)
-            self.ejecutar.start()
+            if ficheroOpcion != 0 and yaborrado is False:
+                # Deshabilitar el botón mientras se descarga el archivo.
+                self.pushButtonEjecutar.setEnabled(False)
+                self.pushButtonComenzar.setEnabled(False)
+                # Ejecutar la descarga en un nuevo hilo.
+                self.ejecutar = Ejecutar()
+                # Conectar las señales que indican el progreso de la descarga
+                # con los métodos correspondientes de la barra de progreso.
+                self.ejecutar.setTotalProgress.connect(self.progressBar.setMaximum)
+                self.ejecutar.setCurrentProgress.connect(self.progressBar.setValue)
+                # self.ejecutar.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
+                self.ejecutar.setListWidgetFile.connect(self.listWidget2.addItem)
+                # Qt invocará el método `succeeded` cuando el archivo se haya
+                # descargado correctamente y `downloadFinished()` cuando el hilo
+                # haya terminado.
+                self.ejecutar.succeeded.connect(self.ejecutarSucceeded)
+                self.ejecutar.finished.connect(self.ejecutarFinished)
+                self.progressBar2.setValue(0)
+                self.listWidget2.clear()
+                yaborrado = True
+                self.ejecutar.start()
+            else:
+                QMessageBox.about(self, "Info", "Primero selecciona una opción o vuelve a listar")
+
 
     def ejecutarSucceeded(self):
         # Establecer el progreso en 100%.
@@ -103,6 +111,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         del self.ejecutar
 
     def initBusqueda(self):
+        global yaborrado
+        yaborrado = False
         # Deshabilitar el botón mientras se descarga el archivo.
         self.pushButtonComenzar.setEnabled(False)
         self.pushButtonEjecutar.setEnabled(False)
@@ -152,9 +162,12 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
      """)
 
     def radio_value(self):
+        global ficheroOpcion
         if self.radioButtonMover.isChecked():
             self.labelOpcion.setText("Mover archivos al directorio Backup")
+            ficheroOpcion = 2
         elif self.radioButtonBorrar.isChecked():
+            ficheroOpcion = 1
             self.labelOpcion.setText("Borrar archivos media no utilizados")
 
     def btnClickedRom(self):
@@ -162,16 +175,23 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         directory = str(QFileDialog.getExistingDirectory(self,
                                                          "Selecciona el directorio media"))
+#        nueva_UCL = [c.replace('/', '\\') for c in directory]
+#        print(nueva_UCL)
+        temp = ""
+        temp = directory.replace('/', '\\')
+        directory = temp
         if directory:
             # print("Directorio seleccionado: ", directory)
             self.labelROM.setText(directory)
 
     def btnClickedXML(self):
         global fileXML
-
         fileXML, _ = QFileDialog.getOpenFileName(self,
                                               'Selecciona el archivo .xml', os.getcwd(),
                                               "Archivos .XML (*.xml);;Todos los archivos(*.*)")
+        temp = ""
+        temp = fileXML.replace('/', '\\')
+        fileXML = temp
         # QDir.homePath(),
         if fileXML:
             # print("Archivo seleccionado: ", file)
@@ -194,7 +214,7 @@ class Busqueda(QThread):
 
     def run(self):
         global LimiteBarra, total, num_archivos, linea, todos_directorios
-        global todos_archivos, ruta_xml, diccionario
+        global todos_archivos, ruta_xml, diccionario, numero_archivos
         ruta_xml = fileXML
         clear()
         print(Back.BLUE + Fore.WHITE + Style.BRIGHT + f"""\n
@@ -212,7 +232,7 @@ class Busqueda(QThread):
 
         """)
 
-        # sleep(5)
+        # (5)
 
         for ruta, directorios, archivos in os.walk(directory, topdown=True):
             print(Back.BLUE + Style.BRIGHT + '\nRuta       :',
@@ -222,14 +242,14 @@ class Busqueda(QThread):
                   Back.BLUE + Style.BRIGHT + fileXML)
             print('\n')
 
-            sleep(2)
             actual = 0
             for elemento in archivos:
                 num_archivos += 1
-                archivo = ruta + os.sep + elemento
+                archivo = ruta + '\\' + elemento
                 estado = os.stat(archivo)
                 tamaño = estado.st_size
-                total += tamaño
+                totaltamaño = 0
+                totaltamaño += tamaño
                 print(linea)
                 print(Fore.YELLOW + 'archivo      :',
                       Fore.LIGHTYELLOW_EX + elemento)
@@ -242,19 +262,20 @@ class Busqueda(QThread):
                           "ENCONTRADO ARCHIVO MULTIMEDIA")
                     todos_directorios.append(ruta)
                     todos_archivos.append(elemento)
+                    totalruta = ruta + '\\' + elemento
                     LimiteBarra = len(archivos)
                     self.setTotalProgress.emit(int(LimiteBarra))
                     self.setCurrentProgress.emit(int(actual))
                     # setLabelArchivoProcesado.emit(str(elemento))
-                    self.setListWidgetFile.emit(str(elemento))
+                    self.setListWidgetFile.emit(str(totalruta))
                     actual += 1
 
         print(linea)
         print(Back.BLACK + Fore.BLUE + Style.BRIGHT +
               'Núm. archivos:', num_archivos)
         print(Back.BLACK + Fore.YELLOW + Style.BRIGHT +
-              'Total (kb)   :', round(total/1024, 1))
-        peso_kb = round(total/1024)
+              'Total (kb)   :', round(totaltamaño/1024, 1))
+        peso_kb = round(totaltamaño/1024)
         peso_Mb = peso_kb / 1000
         print(Back.BLACK + Fore.YELLOW + Style.BRIGHT +
               'Total (Mb)   :', peso_Mb)
@@ -291,15 +312,13 @@ class Ejecutar(QThread):
 
     def run(self):
         global LimiteBarra, total, num_archivos, linea, todos_directorios
-        global todos_archivos, ruta_xml, diccionario, total
+        global todos_archivos, ruta_xml, diccionario, total, numero_archivos
         ruta_xml = fileXML
 
         print("\n")
         print(linea)
         print("\n")
-        sleep(5)
         clear()
-
 
         diccionario_archivos = diccionario.values()
         diccionario_directorios = diccionario.keys()
@@ -310,6 +329,9 @@ class Ejecutar(QThread):
         total = directorio_objetivo + '\\' + archivo_objetivo
         total_archivos_borrados = 0
         pesototal = 0
+        LimiteBarra = numero_archivos
+        self.setTotalProgress.emit(int(LimiteBarra))
+        actual = 0
 
         for file in todos_archivos:
             correcto = 0
@@ -318,6 +340,10 @@ class Ejecutar(QThread):
                     archivo_objetivo = diccionario['archivos'][numero]
                     if file in line:
                         # clear()
+                        self.setCurrentProgress.emit(int(actual))
+                        # setLabelArchivoProcesado.emit(str(elemento))
+                        #self.setListWidgetFile.emit(str(total))
+                        actual += 1
                         print(linea)
                         print()
                         print(Back.BLACK + Fore.YELLOW + Style.BRIGHT +
@@ -327,7 +353,6 @@ class Ejecutar(QThread):
                         total = directorio_objetivo + '\\' + archivo_objetivo
                         print(Back.BLACK + Fore.RED + Style.BRIGHT + "     ",
                               total)
-                        # print(numero)
                         if numero < num_archivos:
                             numero = numero + 1
                         correcto = 1
@@ -348,6 +373,10 @@ class Ejecutar(QThread):
                       Back.BLACK + Fore.WHITE + Style.BRIGHT + total +
                       Back.BLACK + Fore.RED + Style.BRIGHT +
                       " va a ser eliminado")
+                self.setCurrentProgress.emit(int(actual))
+                # setLabelArchivoProcesado.emit(str(elemento))
+                self.setListWidgetFile.emit(str(total))
+                actual += 1
                 if numero < num_archivos:
                     numero = numero + 1
                 print()
@@ -356,11 +385,23 @@ class Ejecutar(QThread):
                 tamaño = estado.st_size
                 pesototal += tamaño
                 total_archivos_borrados += 1
-                # remove(total)
+                if ficheroOpcion == 1:
+                    #remove(total)
+                    pass
+                else:
+                    directorioBackup = directorio_objetivo + os.sep + 'backup'
+                    archivoBackup = directorioBackup + os.sep + archivo_objetivo
+                    print(directorioBackup)
+                    print(archivoBackup)
+                    if os.path.isdir(directorioBackup):
+                        shutil.move(total, archivoBackup)
+                    else:
+                        os.mkdir(directorioBackup)
+                        shutil.move(total, archivoBackup)
 
         fichero_xml.close()
 
-        clear()
+        #clear()
         print()
         print(linea)
         print()
