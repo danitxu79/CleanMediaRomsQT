@@ -29,10 +29,16 @@ from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QDialog,
 from PyQt5.QtWidgets import QProgressBar
 from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow
+import recursos_rc
+from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QIcon, QPixmap
+
 from clear_screen import clear
 import shutil
 from colorama import Fore, Back, Style
 from colorama import init, AnsiToWin32
+from time import sleep
+from pathlib import Path, PureWindowsPath
 
 stream = AnsiToWin32(sys.stderr).stream
 init()
@@ -54,6 +60,8 @@ halistado = False
 ficheroOpcion = 0
 numero_archivos = 0
 yaborrado = False
+directorioOriginal = ""
+directorioOriginal = os.getcwd()
 
 qtCreatorFile = "CleanMediaUI.ui"  # Nombre del archivo UI aquí.
 
@@ -80,8 +88,9 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.pushButtonInfo.clicked.connect(self.btnClickedInfo)
         self.progressBar = self.progressBar2
-        # self.labelArchivoProcesado2 = self.labelArchivoProcesado
         self.listWidget2 = self.listWidget
+        self.labelImage2 = self.labelImage
+
         self.show()
 
     def initEjecutar(self):
@@ -97,8 +106,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 # con los métodos correspondientes de la barra de progreso.
                 self.ejecutar.setTotalProgress.connect(self.progressBar.setMaximum)
                 self.ejecutar.setCurrentProgress.connect(self.progressBar.setValue)
-                # self.ejecutar.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
                 self.ejecutar.setListWidgetFile.connect(self.listWidget2.addItem)
+
                 # Qt invocará el método `succeeded` cuando el archivo se haya
                 # descargado correctamente y `downloadFinished()` cuando el hilo
                 # haya terminado.
@@ -110,7 +119,6 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ejecutar.start()
             else:
                 QMessageBox.about(self, "Info", "Primero selecciona una opción o vuelve a listar")
-
 
     def ejecutarSucceeded(self):
         # Establecer el progreso en 100%.
@@ -126,25 +134,29 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def initBusqueda(self):
         global yaborrado
-        yaborrado = False
-        # Deshabilitar el botón mientras se descarga el archivo.
-        self.pushButtonComenzar.setEnabled(False)
-        self.pushButtonEjecutar.setEnabled(False)
-        # Ejecutar la descarga en un nuevo hilo.
-        self.busqueda = Busqueda()
-        # Conectar las señales que indican el progreso de la descarga
-        # con los métodos correspondientes de la barra de progreso.
-        self.busqueda.setTotalProgress.connect(self.progressBar.setMaximum)
-        self.busqueda.setCurrentProgress.connect(self.progressBar.setValue)
-        # self.busqueda.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
-        self.busqueda.setListWidgetFile.connect(self.listWidget2.addItem)
-        # Qt invocará el método `succeeded` cuando el archivo se haya
-        # descargado correctamente y `downloadFinished()` cuando el hilo
-        # haya terminado.
-        self.busqueda.succeeded.connect(self.busquedaSucceeded)
-        self.busqueda.finished.connect(self.busquedaFinished)
-        self.listWidget2.clear()
-        self.busqueda.start()
+        if directory:
+            yaborrado = False
+            # Deshabilitar el botón mientras se descarga el archivo.
+            self.pushButtonComenzar.setEnabled(False)
+            self.pushButtonEjecutar.setEnabled(False)
+            # Ejecutar la descarga en un nuevo hilo.
+            self.busqueda = Busqueda()
+            # Conectar las señales que indican el progreso de la descarga
+            # con los métodos correspondientes de la barra de progreso.
+            self.busqueda.setTotalProgress.connect(self.progressBar.setMaximum)
+            self.busqueda.setCurrentProgress.connect(self.progressBar.setValue)
+            # self.busqueda.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
+            self.busqueda.setListWidgetFile.connect(self.listWidget2.addItem)
+            # self.busqueda.setImagen.connect(self.labelImagen2.setPixmap)
+            # Qt invocará el método `succeeded` cuando el archivo se haya
+            # descargado correctamente y `downloadFinished()` cuando el hilo
+            # haya terminado.
+            self.busqueda.succeeded.connect(self.busquedaSucceeded)
+            self.busqueda.finished.connect(self.busquedaFinished)
+            self.listWidget2.clear()
+            self.busqueda.start()
+        else:
+            QMessageBox.about(self, "Info", "Primero selecciona un directorio")
 
     def busquedaSucceeded(self):
         global halistado
@@ -188,16 +200,55 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.pushButtonEjecutar.setText("Borrar")
 
     def btnClickedRom(self):
-        global directory, fileXML
-
+        global directory, fileXML, directorioOriginal
         directory = str(QFileDialog.getExistingDirectory(self,
-                                                         "Selecciona el directorio media"))
-#        nueva_UCL = [c.replace('/', '\\') for c in directory]
-#        print(nueva_UCL)
+                                           "Selecciona el directorio media"))
         temp = ""
         temp = directory.replace('/', '\\')
         directory = temp
         fileXML = directory + os.sep + 'gamelist.xml'
+        os.chdir(directory)
+        temp = os.path.basename(directory)
+        fileImage = ""
+        if temp == "mame":
+            #print("\n base ", os.path.basename(directorioOriginal))
+            #print("\n original ", directorioOriginal)
+            self.labelPlataforma.setText("Mame")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "MAME.png"
+            #self.im = QPixmap(fileImage)
+            self.im = QPixmap(":/Plataformas/systemlogo/MAME.png")
+
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "fba":
+            self.labelPlataforma.setText("Final Burn Alpha")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Final_Burn_Alpha.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/Final_Burn_Alpha.png")
+            #self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "nes":
+            self.labelPlataforma.setText("Nintendo Entertainment System")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Nintendo_Entertainment_System.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/Nintendo_Entertainment_System.png")
+            #self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sms":
+            self.labelPlataforma.setText("Sega Master System")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Sega_Master_System.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/Sega_Master_System.png")
+            #self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "roms" or temp == "rom":
+            self.labelPlataforma.setText("Directorio Principal de las ROMs")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Attract_Mode_Setup.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/Attract_Mode_Setup.png")
+            #self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+
         if directory:
             # print("Directorio seleccionado: ", directory)
             self.labelROM.setText(directory)
@@ -237,6 +288,7 @@ class Busqueda(QThread):
         global LimiteBarra, total, num_archivos, linea, todos_directorios
         global todos_archivos, ruta_xml, diccionario, numero_archivos
         ruta_xml = fileXML
+        LimiteBarra = 0
         clear()
         diccionario.clear()
         todos_archivos.clear()
@@ -259,8 +311,14 @@ class Busqueda(QThread):
         """)
 
         actual = 0
+
         for ruta, directorios, archivos in os.walk(directory, topdown=True):
             LimiteBarra += len(archivos)
+
+            print(linea)
+            if LimiteBarra == 0:
+                self.setListWidgetFile.emit(str("No hay ficheros"))
+                return
         for ruta, directorios, archivos in os.walk(directory, topdown=True):
             print(Back.BLUE + Style.BRIGHT + '\nRuta       :',
                   Back.BLUE + Style.BRIGHT + ruta)
@@ -358,6 +416,7 @@ class Ejecutar(QThread):
         LimiteBarra = numero_archivos
         self.setTotalProgress.emit(int(LimiteBarra))
         actual = 0
+        queDirectorio = ""
 
         for file in todos_archivos:
             correcto = 0
@@ -421,6 +480,7 @@ class Ejecutar(QThread):
                     else:
                         os.mkdir(directorioBackup)
                         shutil.move(total, archivoBackup)
+
 
         fichero_xml.close()
 
