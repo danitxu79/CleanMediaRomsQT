@@ -248,6 +248,12 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             #self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
+        elif temp == "snes":
+            self.labelPlataforma.setText("Súper Nintendo")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Super_Nintendo_Entertainment_System.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/Super_Nintendo_Entertainment_System.png")
+            #self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
 
         if directory:
             # print("Directorio seleccionado: ", directory)
