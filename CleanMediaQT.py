@@ -10,7 +10,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.3                                           *
+# *       CleanMediaQT.py  ver. 1.1                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
@@ -364,7 +364,7 @@ class Dialog(QDialog):
             if os.path.isfile("version.cmr"):
                 remove("version.cmr")
             rename("version.act", "version.cmr")
-        execl("python actualizar.py")
+        os.execl("python actualizar.py")
         # remove("actualizar.py")
         # python = sys.executable
         # os.execl(python, python, * sys.argv)
@@ -385,7 +385,7 @@ class Downloader(QThread):
         super().__init__()
 
     def run(self):
-        url = "http://www.anabasagames.com/files/" "actualizar.py"
+        url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "actualizar.py"
         url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "CleanMediaQT.py"
         filename = url[url.rfind("/") + 1:]
         # filename2 = url2[url2.rfind("/") + 1:]
