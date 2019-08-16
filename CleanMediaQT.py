@@ -10,7 +10,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.3                                          *
+# *       CleanMediaQT.py  ver. 1.3                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
@@ -21,24 +21,18 @@ import sys
 import os
 from os import remove, rename
 # from PyQt5.QtCore import QDir
-from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QDialog,
-                             QFileDialog, QGridLayout, QHBoxLayout,
-                             QHeaderView, QLabel,
-                             QProgressDialog, QPushButton, QSizePolicy,
-                             QMessageBox)
-from PyQt5.QtWidgets import QProgressBar
+from PyQt5.QtWidgets import (QDialog, QProgressBar, QFileDialog,
+                             QLabel, QPushButton, QMessageBox)
 from PyQt5.QtCore import QThread, pyqtSignal
 # from PyQt5.QtWidgets import QMainWindow
 import recursos_rc
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QPixmap
 
 from clear_screen import clear
 import shutil
 from colorama import Fore, Back, Style
 from colorama import init, AnsiToWin32
 from time import sleep
-from pathlib import Path, PureWindowsPath
 from urllib.request import urlopen
 
 stream = AnsiToWin32(sys.stderr).stream
@@ -66,7 +60,8 @@ directorioOriginal = os.getcwd()
 
 qtCreatorFile = "CleanMediaUI.ui"  # Nombre del archivo UI aquí.
 
-Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)  # El modulo ui carga el archivo
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+# El modulo ui carga el archivo
 
 
 class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -111,12 +106,16 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ejecutar = Ejecutar()
                 # Conectar las señales que indican el progreso de la descarga
                 # con los métodos correspondientes de la barra de progreso.
-                self.ejecutar.setTotalProgress.connect(self.progressBar.setMaximum)
-                self.ejecutar.setCurrentProgress.connect(self.progressBar.setValue)
-                self.ejecutar.setListWidgetFile.connect(self.listWidget2.addItem)
+                self.ejecutar.setTotalProgress.connect
+                (self.progressBar.setMaximum)
+                self.ejecutar.setCurrentProgress.connect
+                (self.progressBar.setValue)
+                self.ejecutar.setListWidgetFile.connect
+                (self.listWidget2.addItem)
 
                 # Qt invocará el método `succeeded` cuando el archivo se haya
-                # descargado correctamente y `downloadFinished()` cuando el hilo
+                # descargado correctamente y `downloadFinished()`
+                # cuando el hilo
                 # haya terminado.
                 self.ejecutar.succeeded.connect(self.ejecutarSucceeded)
                 self.ejecutar.finished.connect(self.ejecutarFinished)
@@ -125,7 +124,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 yaborrado = True
                 self.ejecutar.start()
             else:
-                QMessageBox.about(self, "Info", "Primero selecciona una opción o vuelve a listar")
+                QMessageBox.about(self, "Info", "Primero selecciona una\
+                                  opción o vuelve a listar")
 
     def ejecutarSucceeded(self):
         # Establecer el progreso en 100%.
@@ -152,7 +152,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # con los métodos correspondientes de la barra de progreso.
             self.busqueda.setTotalProgress.connect(self.progressBar.setMaximum)
             self.busqueda.setCurrentProgress.connect(self.progressBar.setValue)
-            # self.busqueda.setLabelArchivoProcesado.connect(self.labelArchivoProcesado2.setText)
+            # self.busqueda.setLabelArchivoProcesado.connect
+            # (self.labelArchivoProcesado2.setText)
             self.busqueda.setListWidgetFile.connect(self.listWidget2.addItem)
             # self.busqueda.setImagen.connect(self.labelImagen2.setPixmap)
             # Qt invocará el método `succeeded` cuando el archivo se haya
@@ -196,9 +197,9 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
      """)
 
     def actualizar(self):
-        #r = urlopen("https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/CleanMediaQT.py")
         if os.path.isfile("version.cmr"):
-            r = urlopen("https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/version.cmr")
+            r = urlopen("https://raw.githubusercontent.com/danitxu79/\
+                        CleanMediaRomsQT/master/version.cmr")
             f = open("version.act", "wb")
             f.write(r.read())
             r.close()
@@ -216,7 +217,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 remove("version.act")
         else:
-            r = urlopen("https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/version.cmr")
+            r = urlopen("https://raw.githubusercontent.com/danitxu79/\
+                        CleanMediaRomsQT/master/version.cmr")
             f = open("version.act", "wb")
             f.write(r.read())
             r.close()
@@ -250,7 +252,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # print("\n base ", os.path.basename(directorioOriginal))
             # print("\n original ", directorioOriginal)
             self.labelPlataforma.setText("Mame")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "MAME.png"
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "MAME.png"
             # self.im = QPixmap(fileImage)
             self.im = QPixmap(":/Plataformas/systemlogo/MAME.png")
 
@@ -258,36 +261,45 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         elif temp == "fba":
             self.labelPlataforma.setText("Final Burn Alpha")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Final_Burn_Alpha.png"
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Final_Burn_Alpha.png"
             self.im = QPixmap(":/Plataformas/systemlogo/Final_Burn_Alpha.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "nes":
             self.labelPlataforma.setText("Nintendo Entertainment System")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Nintendo_Entertainment_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/Nintendo_Entertainment_System.png")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Nintendo_Entertainment_System.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/\
+                              Nintendo_Entertainment_System.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "sms":
             self.labelPlataforma.setText("Sega Master System")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Sega_Master_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/Sega_Master_System.png")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Sega_Master_System.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/\
+                              Sega_Master_System.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "roms" or temp == "rom":
             self.labelPlataforma.setText("Directorio Principal de las ROMs")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Attract_Mode_Setup.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/Attract_Mode_Setup.png")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Attract_Mode_Setup.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/\
+                              Attract_Mode_Setup.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "snes":
             self.labelPlataforma.setText("Súper Nintendo")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Super_Nintendo_Entertainment_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/Super_Nintendo_Entertainment_System.png")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Super_Nintendo_Entertainment_System.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/\
+                              Super_Nintendo_Entertainment_System.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
