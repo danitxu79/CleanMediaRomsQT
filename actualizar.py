@@ -11,4 +11,5 @@ import os
 
 remove("CleanMediaQT.py")
 rename("CleanMediaQT.act", "CleanMediaQT.py")
-os.execl("python" "CleanMediaQT.py")
+python = sys.executable
+        os.execl(python, "CleanMediaQT.py")
