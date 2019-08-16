@@ -10,7 +10,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.0                                           *
+# *       CleanMediaQT.py  ver. 1.3                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
@@ -19,8 +19,8 @@
 from PyQt5 import QtWidgets, uic
 import sys
 import os
-from os import remove
-from PyQt5.QtCore import QDir
+from os import remove, rename
+# from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QDialog,
                              QFileDialog, QGridLayout, QHBoxLayout,
                              QHeaderView, QLabel,
@@ -28,7 +28,7 @@ from PyQt5.QtWidgets import (QAbstractItemView, QApplication, QDialog,
                              QMessageBox)
 from PyQt5.QtWidgets import QProgressBar
 from PyQt5.QtCore import QThread, pyqtSignal
-from PyQt5.QtWidgets import QMainWindow
+# from PyQt5.QtWidgets import QMainWindow
 import recursos_rc
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QIcon, QPixmap
@@ -39,6 +39,7 @@ from colorama import Fore, Back, Style
 from colorama import init, AnsiToWin32
 from time import sleep
 from pathlib import Path, PureWindowsPath
+from urllib.request import urlopen
 
 stream = AnsiToWin32(sys.stderr).stream
 init()
@@ -90,8 +91,14 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.progressBar = self.progressBar2
         self.listWidget2 = self.listWidget
         self.labelImage2 = self.labelImage
-
         self.show()
+        if os.path.isfile("version.act"):
+            remove("version.act")
+        if os.path.isfile("CleanMediaACT.act"):
+            remove("CleanMediaACT.act")
+        if os.path.isfile("CleanMediaACT.py"):
+            remove("CleanMediaACT.py")
+        self.actualizar()
 
     def initEjecutar(self):
         global halistado, yaborrado
@@ -180,13 +187,42 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
    el archivo.
      Versión beta, haz una copia de seguridad antes de usar este programa
 
-     CleanMedia.py  ver. 2.0
+     CleanMediaQT.py  ver. 1.3
 
      Creado por Daniel Serrano   -   dani.eus79@gmail.com
 
      https://danitxu79.github.io/CleanMediaRoms/
 
      """)
+
+    def actualizar(self):
+        r = urlopen("https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/CleanMediaQT.py")
+        if os.path.isfile("version.cmr"):
+            r = urlopen("https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/version.cmr")
+            f = open("version.act", "wb")
+            f.write(r.read())
+            r.close()
+            f.close()
+            f = open("version.act", "r")
+            r = open("version.cmr", "r")
+            lf = f.read()
+            lr = r.read()
+            r.close()
+            f.close()
+            if lr < lf:
+                # remove("version.act")
+                dialog = Dialog(self)  # self hace referencia al padre
+                dialog.show()
+            else:
+                remove("version.act")
+        else:
+            r = urlopen("https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/version.cmr")
+            f = open("version.act", "wb")
+            f.write(r.read())
+            r.close()
+            f.close()
+            dialog = Dialog(self)  # self hace referencia al padre
+            dialog.show()
 
     def radio_value(self):
         global ficheroOpcion
@@ -211,11 +247,11 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         temp = os.path.basename(directory)
         fileImage = ""
         if temp == "mame":
-            #print("\n base ", os.path.basename(directorioOriginal))
-            #print("\n original ", directorioOriginal)
+            # print("\n base ", os.path.basename(directorioOriginal))
+            # print("\n original ", directorioOriginal)
             self.labelPlataforma.setText("Mame")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "MAME.png"
-            #self.im = QPixmap(fileImage)
+            # self.im = QPixmap(fileImage)
             self.im = QPixmap(":/Plataformas/systemlogo/MAME.png")
 
             self.labelImage2.setPixmap(self.im)
@@ -224,35 +260,35 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.labelPlataforma.setText("Final Burn Alpha")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Final_Burn_Alpha.png"
             self.im = QPixmap(":/Plataformas/systemlogo/Final_Burn_Alpha.png")
-            #self.im = QPixmap(fileImage)
+            # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "nes":
             self.labelPlataforma.setText("Nintendo Entertainment System")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Nintendo_Entertainment_System.png"
             self.im = QPixmap(":/Plataformas/systemlogo/Nintendo_Entertainment_System.png")
-            #self.im = QPixmap(fileImage)
+            # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "sms":
             self.labelPlataforma.setText("Sega Master System")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Sega_Master_System.png"
             self.im = QPixmap(":/Plataformas/systemlogo/Sega_Master_System.png")
-            #self.im = QPixmap(fileImage)
+            # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "roms" or temp == "rom":
             self.labelPlataforma.setText("Directorio Principal de las ROMs")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Attract_Mode_Setup.png"
             self.im = QPixmap(":/Plataformas/systemlogo/Attract_Mode_Setup.png")
-            #self.im = QPixmap(fileImage)
+            # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "snes":
             self.labelPlataforma.setText("Súper Nintendo")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep + "Super_Nintendo_Entertainment_System.png"
             self.im = QPixmap(":/Plataformas/systemlogo/Super_Nintendo_Entertainment_System.png")
-            #self.im = QPixmap(fileImage)
+            # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         if directory:
@@ -265,8 +301,10 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def btnClickedXML(self):
         global fileXML
         fileXML, _ = QFileDialog.getOpenFileName(self,
-                                              'Selecciona el archivo .xml', os.getcwd(),
-                                              "Archivos .XML (*.xml);;Todos los archivos(*.*)")
+                                                 'Selecciona el archivo .xml',
+                                                 os.getcwd(),
+                                                 "Archivos .XML (*.xml);;Todos\
+                                                 los archivos(*.*)")
         temp = ""
         temp = fileXML.replace('/', '\\')
         fileXML = temp
@@ -274,6 +312,121 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if fileXML:
             # print("Archivo seleccionado: ", file)
             self.labelXML.setText(fileXML)
+
+
+class Dialog(QDialog):
+    def __init__(self, *args, **kwargs):
+        super(Dialog, self).__init__(*args, **kwargs)
+        self.setWindowTitle("Actualización requerida")
+        self.resize(400, 300)
+        self.label = QLabel("Presione el botón para iniciar la descarga.",
+                            self)
+        self.label.setGeometry(20, 20, 200, 25)
+        self.button = QPushButton("Iniciar descarga", self)
+        self.button.move(20, 60)
+        self.button.pressed.connect(self.initDownload)
+        self.progressBar = QProgressBar(self)
+        self.progressBar.setGeometry(20, 115, 300, 25)
+
+    def initDownload(self):
+        self.label.setText("Descargando archivo...")
+        # Deshabilitar el botón mientras se descarga el archivo.
+        self.button.setEnabled(False)
+        # Ejecutar la descarga en un nuevo hilo.
+        self.downloader = Downloader()
+        # Conectar las señales que indican el progreso de la descarga
+        # con los métodos correspondientes de la barra de progreso.
+        self.downloader.setTotalProgress.connect(self.progressBar.setMaximum)
+        self.downloader.setCurrentProgress.connect(self.progressBar.setValue)
+        # Qt invocará el método `succeeded` cuando el archivo se haya
+        # descargado correctamente y `downloadFinished()` cuando el hilo
+        # haya terminado.
+        self.downloader.succeeded.connect(self.downloadSucceeded)
+        self.downloader.finished.connect(self.downloadFinished)
+        self.downloader.start()
+
+    def downloadSucceeded(self):
+        # Establecer el progreso en 100%.
+        self.progressBar.setValue(self.progressBar.maximum())
+        self.label.setText("¡El archivo se ha descargado!")
+
+    def downloadFinished(self):
+        # Restablecer el botón.
+        self.button.setEnabled(True)
+        # Eliminar el hilo una vez que fue utilizado.
+        # rename("actualizar.act", "actualizar.py")
+        # rename("CleanMediaACT.act", "CleanMediaACT.py")
+        del self.downloader
+        # os.system("python actualizar.py")
+        # remove("CleanMediaQT.py")
+        # rename("CleanMediaACT.py", "CleanMediaQT.py")
+        if os.path.isfile("version.act"):
+            if os.path.isfile("version.cmr"):
+                remove("version.cmr")
+            rename("version.act", "version.cmr")
+        # remove("actualizar.py")
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
+        # sys.exit()
+
+
+class Downloader(QThread):
+
+    # Señal para que la ventana establezca el valor máximo
+    # de la barra de progreso.
+    setTotalProgress = pyqtSignal(int)
+    # Señal para aumentar el progreso.
+    setCurrentProgress = pyqtSignal(int)
+    # Señal para indicar que el archivo se descargó correctamente.
+    succeeded = pyqtSignal()
+
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        # url = "http://www.anabasagames.com/files/" "actualizar.act"
+        url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "CleanMediaQT.py"
+        # filename = url[url.rfind("/") + 1:]
+        filename2 = url2[url2.rfind("/") + 1:]
+        # f = urlopen(url)
+        f2 = urlopen(url2)
+        # fsize = int(f.info()["Content-Length"])
+        fsize = 0
+        f2size = int(f2.info()["Content-Length"])
+        ftotal = fsize + f2size
+        # f.close()
+        f2.close()
+        # self.descargar(url, filename)
+        self.descargar(url2, filename2)
+        self.setTotalProgress.emit(ftotal)
+
+    def descargar(self, url, filename):
+        readBytes = 0
+        chunkSize = 1024
+        # Abrir la dirección de URL.
+        with urlopen(url) as r:
+            # Avisar a la ventana cuántos bytes serán descargados.
+            with open(filename, "ab") as f:
+                while True:
+                    # Leer una porción del archivo que estamos descargando.
+                    chunk = r.read(chunkSize)
+                    # Si el resultado es `None` quiere decir que todavía
+                    # no se han descargado los datos. Simplemente
+                    # seguimos esperando.
+                    if chunk is None:
+                        continue
+                    # Si el resultado es una instancia de `bytes` vacía
+                    # quiere decir que el archivo está completo.
+                    elif chunk == b"":
+                        break
+                    # Escribir la porción descargada en el archivo local.
+                    f.write(chunk)
+                    readBytes += chunkSize
+                    # Avisar a la ventana la cantidad de bytes recibidos.
+                    self.setCurrentProgress.emit(readBytes)
+        # Si esta línea llega a ejecutarse es porque no ocurrió ninguna
+        # excepción en el código anterior.
+        self.succeeded.emit()
 
 
 class Busqueda(QThread):
@@ -310,7 +463,7 @@ class Busqueda(QThread):
 
           Versión beta, haz una copia de seguridad antes de usar este programa
 
-               CleanMedia.py  ver. 2.0
+               CleanMediaQT.py  ver. 1.3
 
             Creado por Daniel Serrano   -   dani.eus79@gmail.com
 
@@ -353,7 +506,7 @@ class Busqueda(QThread):
                     todos_directorios.append(ruta)
                     todos_archivos.append(elemento)
                     totalruta = ruta + os.sep + elemento
-                    #LimiteBarra = len(archivos)
+                    # LimiteBarra = len(archivos)
                     self.setTotalProgress.emit(int(LimiteBarra))
                     self.setCurrentProgress.emit(int(actual))
                     # setLabelArchivoProcesado.emit(str(elemento))
@@ -410,8 +563,8 @@ class Ejecutar(QThread):
         print("\n")
         clear()
 
-        diccionario_archivos = diccionario.values()
-        diccionario_directorios = diccionario.keys()
+        # diccionario_archivos = diccionario.values()
+        # diccionario_directorios = diccionario.keys()
         print(linea)
         numero = 0
         archivo_objetivo = diccionario['archivos'][0]
@@ -422,7 +575,7 @@ class Ejecutar(QThread):
         LimiteBarra = numero_archivos
         self.setTotalProgress.emit(int(LimiteBarra))
         actual = 0
-        queDirectorio = ""
+        # queDirectorio = ""
 
         for file in todos_archivos:
             correcto = 0
@@ -433,7 +586,7 @@ class Ejecutar(QThread):
                         # clear()
                         self.setCurrentProgress.emit(int(actual))
                         # setLabelArchivoProcesado.emit(str(elemento))
-                        #self.setListWidgetFile.emit(str(total))
+                        # self.setListWidgetFile.emit(str(total))
                         actual += 1
                         print(linea)
                         print()
@@ -487,10 +640,9 @@ class Ejecutar(QThread):
                         os.mkdir(directorioBackup)
                         shutil.move(total, archivoBackup)
 
-
         fichero_xml.close()
 
-        #clear()
+        # clear()
         print()
         print(linea)
         print()
