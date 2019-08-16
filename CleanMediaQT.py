@@ -106,12 +106,9 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.ejecutar = Ejecutar()
                 # Conectar las señales que indican el progreso de la descarga
                 # con los métodos correspondientes de la barra de progreso.
-                self.ejecutar.setTotalProgress.connect
-                (self.progressBar.setMaximum)
-                self.ejecutar.setCurrentProgress.connect
-                (self.progressBar.setValue)
-                self.ejecutar.setListWidgetFile.connect
-                (self.listWidget2.addItem)
+                self.ejecutar.setTotalProgress.connect(self.progressBar.setMaximum)
+                self.ejecutar.setCurrentProgress.connect(self.progressBar.setValue)
+                self.ejecutar.setListWidgetFile.connect(self.listWidget2.addItem)
 
                 # Qt invocará el método `succeeded` cuando el archivo se haya
                 # descargado correctamente y `downloadFinished()`
@@ -271,8 +268,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.labelPlataforma.setText("Nintendo Entertainment System")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
                 "Nintendo_Entertainment_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/\
-                              Nintendo_Entertainment_System.png")
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Nintendo_Entertainment_System.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
@@ -280,8 +277,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.labelPlataforma.setText("Sega Master System")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
                 "Sega_Master_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/\
-                              Sega_Master_System.png")
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Sega_Master_System.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
@@ -289,8 +286,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.labelPlataforma.setText("Directorio Principal de las ROMs")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
                 "Attract_Mode_Setup.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/\
-                              Attract_Mode_Setup.png")
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Attract_Mode_Setup.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
@@ -298,8 +295,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.labelPlataforma.setText("Súper Nintendo")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
                 "Super_Nintendo_Entertainment_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/\
-                              Super_Nintendo_Entertainment_System.png")
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Super_Nintendo_Entertainment_System.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
@@ -398,8 +395,10 @@ class Downloader(QThread):
         super().__init__()
 
     def run(self):
-        url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "actualizar.py"
-        url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "CleanMediaQT.py"
+        url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
+        "master/" "actualizar.py"
+        url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
+        "master/" "CleanMediaQT.py"
         filename = url[url.rfind("/") + 1:]
         # filename2 = url2[url2.rfind("/") + 1:]
         filename2 = "CleanMediaQT.act"
@@ -589,6 +588,7 @@ class Ejecutar(QThread):
         total_archivos_borrados = 0
         pesototal = 0
         LimiteBarra = numero_archivos
+        print(LimiteBarra)
         self.setTotalProgress.emit(int(LimiteBarra))
         actual = 0
         # queDirectorio = ""
