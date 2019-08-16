@@ -10,7 +10,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.3                                           *
+# *       CleanMediaQT.py  ver. 1.1                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
@@ -393,11 +393,12 @@ class Downloader(QThread):
         f = urlopen(url)
         f2 = urlopen(url2)
         fsize = int(f.info()["Content-Length"])
-        fsize = 0
+        # fsize = 0
         f2size = int(f2.info()["Content-Length"])
         ftotal = fsize + f2size
         f.close()
         f2.close()
+        self.setTotalProgress.emit(ftotal)
         self.descargar(url, filename)
         self.descargar(url2, filename2)
         self.setTotalProgress.emit(ftotal)
