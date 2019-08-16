@@ -409,25 +409,44 @@ class Downloader(QThread):
         super().__init__()
 
     def run(self):
-        url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
-        "master/" "actualizar.py"
-        url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
-        "master/" "CleanMediaQT.py"
-        filename = url[url.rfind("/") + 1:]
-        # filename2 = url2[url2.rfind("/") + 1:]
-        filename2 = "CleanMediaQT.act"
-        f = urlopen(url)
-        f2 = urlopen(url2)
-        fsize = int(f.info()["Content-Length"])
-        # fsize = 0
-        f2size = int(f2.info()["Content-Length"])
-        ftotal = fsize + f2size
-        f.close()
-        f2.close()
-        self.setTotalProgress.emit(ftotal)
-        self.descargar(url, filename)
-        self.descargar(url2, filename2)
-        self.setTotalProgress.emit(ftotal)
+        if os.path.isfile("recursos_rc.py"):
+            url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
+            "master/" "actualizar.py"
+            url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
+            "master/" "CleanMediaQT.py"
+            filename = url[url.rfind("/") + 1:]
+            # filename2 = url2[url2.rfind("/") + 1:]
+            filename2 = "CleanMediaQT.act"
+            f = urlopen(url)
+            f2 = urlopen(url2)
+            fsize = int(f.info()["Content-Length"])
+            # fsize = 0
+            f2size = int(f2.info()["Content-Length"])
+            ftotal = fsize + f2size
+            f.close()
+            f2.close()
+            self.setTotalProgress.emit(ftotal)
+            self.descargar(url, filename)
+            self.descargar(url2, filename2)
+            self.setTotalProgress.emit(ftotal)
+        else:
+            url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/" "master/" "actualizar.py"
+            url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/" "master/" "CleanMediaQT.py"
+            filename = url[url.rfind("/") + 1:]
+            # filename2 = url2[url2.rfind("/") + 1:]
+            filename2 = "CleanMediaQT.act"
+            f = urlopen(url)
+            f2 = urlopen(url2)
+            fsize = int(f.info()["Content-Length"])
+            # fsize = 0
+            f2size = int(f2.info()["Content-Length"])
+            ftotal = fsize + f2size
+            f.close()
+            f2.close()
+            self.setTotalProgress.emit(ftotal)
+            self.descargar(url, filename)
+            self.descargar(url2, filename2)
+            self.setTotalProgress.emit(ftotal)
 
     def descargar(self, url, filename):
         readBytes = 0

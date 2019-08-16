@@ -20,7 +20,7 @@
    <string>Clean Media v2</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="recursos.qrc">
+   <iconset>
     <normaloff>:/icono/escoba.ico</normaloff>:/icono/escoba.ico</iconset>
   </property>
   <property name="iconSize">
