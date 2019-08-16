@@ -236,11 +236,16 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def btnClickedRom(self):
         global directory, fileXML, directorioOriginal
+        tempdir = directory
         directory = str(QFileDialog.getExistingDirectory(self,
                                            "Selecciona el directorio media"))
         temp = ""
         temp = directory.replace('/', '\\')
         directory = temp
+        if directory == "" and tempdir == "":
+            directory = directorioOriginal
+        if directory == "" and tempdir != "":
+            directory = tempdir
         fileXML = directory + os.sep + 'gamelist.xml'
         os.chdir(directory)
         temp = os.path.basename(directory)
@@ -303,12 +308,17 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if directory:
             # print("Directorio seleccionado: ", directory)
             self.labelROM.setText(directory)
+        else:
+            directory = tempdir
+            self.labelROM.setText(directory)
+
         if fileXML:
             # print("Archivo seleccionado: ", file)
             self.labelXML.setText(fileXML)
 
     def btnClickedXML(self):
         global fileXML
+        tempXML = fileXML
         fileXML, _ = QFileDialog.getOpenFileName(self,
                                                  'Selecciona el archivo .xml',
                                                  os.getcwd(),
@@ -319,7 +329,11 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         fileXML = temp
         # QDir.homePath(),
         if fileXML:
-            # print("Archivo seleccionado: ", file)
+            # print("Archivo seleccionado: ", fileXML)
+            self.labelXML.setText(fileXML)
+        else:
+            fileXML = tempXML
+            # print("Archivo seleccionado: ", fileXML)
             self.labelXML.setText(fileXML)
 
 
@@ -494,12 +508,12 @@ class Busqueda(QThread):
                 self.setListWidgetFile.emit(str("No hay ficheros"))
                 return
         for ruta, directorios, archivos in os.walk(directory, topdown=True):
-            print(Back.BLUE + Style.BRIGHT + '\nRuta       :',
-                  Back.BLUE + Style.BRIGHT + ruta)
-            print('\n')
-            print(Back.BLUE + Style.BRIGHT + '\nArchivo xml       :',
-                  Back.BLUE + Style.BRIGHT + fileXML)
-            print('\n')
+#            print(Back.BLUE + Style.BRIGHT + '\nRuta       :',
+#                  Back.BLUE + Style.BRIGHT + ruta)
+#            print('\n')
+#            print(Back.BLUE + Style.BRIGHT + '\nArchivo xml       :',
+#                  Back.BLUE + Style.BRIGHT + fileXML)
+#            print('\n')
 
             for elemento in archivos:
                 num_archivos += 1
