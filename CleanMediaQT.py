@@ -198,8 +198,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def actualizar(self):
         if os.path.isfile("version.cmr"):
-            r = urlopen("https://raw.githubusercontent.com/danitxu79/\
-                        CleanMediaRomsQT/master/version.cmr")
+            r = urlopen("https://raw.githubusercontent.com/danitxu79/"
+                        "CleanMediaRomsQT/master/version.cmr")
             f = open("version.act", "wb")
             f.write(r.read())
             r.close()
@@ -217,8 +217,8 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             else:
                 remove("version.act")
         else:
-            r = urlopen("https://raw.githubusercontent.com/danitxu79/\
-                        CleanMediaRomsQT/master/version.cmr")
+            r = urlopen("https://raw.githubusercontent.com/danitxu79/"
+                        "CleanMediaRomsQT/master/version.cmr")
             f = open("version.act", "wb")
             f.write(r.read())
             r.close()
