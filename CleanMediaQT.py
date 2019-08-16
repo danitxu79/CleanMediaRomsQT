@@ -364,7 +364,7 @@ class Dialog(QDialog):
             if os.path.isfile("version.cmr"):
                 remove("version.cmr")
             rename("version.act", "version.cmr")
-        os.execl("python actualizar.py")
+        os.execl("python" "actualizar.py")
         # remove("actualizar.py")
         # python = sys.executable
         # os.execl(python, python, * sys.argv)
