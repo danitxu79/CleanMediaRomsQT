@@ -305,6 +305,60 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
+        elif temp == "megadrive":
+            self.labelPlataforma.setText("Megadrive")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Sega_Mega_Drive.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Sega_Mega_Drive.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "3do":
+            self.labelPlataforma.setText("3do Real Multiplayer")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Panasonic_3DO.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Panasonic_3DO.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "Amiga":
+            self.labelPlataforma.setText("Amiga")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Commodore_Amiga.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Commodore_Amiga.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "amstradcpc":
+            self.labelPlataforma.setText("Amstrad CPC")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Amstrad_CPC.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Amstrad_CPC.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "apple2":
+            self.labelPlataforma.setText("Apple 2")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Apple2.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Apple2.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "atari2600":
+            self.labelPlataforma.setText("Atari 2600")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Atari_2600.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Atari_2600.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
         if directory:
             # print("Directorio seleccionado: ", directory)
             self.labelROM.setText(directory)
