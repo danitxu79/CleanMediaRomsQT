@@ -10,7 +10,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.1                                           *
+# *       CleanMediaQT.py  ver. 1.3                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
