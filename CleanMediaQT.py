@@ -365,7 +365,7 @@ class Dialog(QDialog):
                 remove("version.cmr")
             rename("version.act", "version.cmr")
         python = sys.executable
-        os.execl(python, 'actualizar.py')
+        os.execl(python, python, 'actualizar.py')
         # remove("actualizar.py")
         # python = sys.executable
         # os.execl(python, python, * sys.argv)
