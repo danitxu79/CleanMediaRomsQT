@@ -323,7 +323,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
-        elif temp == "Amiga":
+        elif temp == "amiga":
             self.labelPlataforma.setText("Amiga")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
                 "Commodore_Amiga.png"
@@ -358,6 +358,43 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
                               "Atari_2600.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
+
+        elif temp == "atari5200":
+            self.labelPlataforma.setText("Atari 5200")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Atari_5200.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Atari_5200.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "atari7800":
+            self.labelPlataforma.setText("Atari 7800")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Atari_7800.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Atari_7800.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "atarijaguar":
+            self.labelPlataforma.setText("Atari Jaguar")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "Atari Jaguar.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "Atari Jaguar.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "colecovision":
+            self.labelPlataforma.setText("Coleco Vision")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "ColecoVision.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "ColecoVision.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
 
         if directory:
             # print("Directorio seleccionado: ", directory)
@@ -464,10 +501,8 @@ class Downloader(QThread):
 
     def run(self):
         if os.path.isfile("recursos_rc.py"):
-            url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
-            "master/" "actualizar.py"
-            url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/"
-            "master/" "CleanMediaQT.py"
+            url = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "actualizar.py"
+            url2 = "https://raw.githubusercontent.com/danitxu79/CleanMediaRomsQT/master/" "CleanMediaQT.py"
             filename = url[url.rfind("/") + 1:]
             # filename2 = url2[url2.rfind("/") + 1:]
             filename2 = "CleanMediaQT.act"
