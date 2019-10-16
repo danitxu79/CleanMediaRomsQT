@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # *****************************************************************************
 # *                                                                           *
@@ -20,11 +21,11 @@ from PyQt5 import QtWidgets, uic
 import sys
 import os
 from os import remove, rename
-# from PyQt5.QtCore import QDir
+from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import (QDialog, QProgressBar, QFileDialog,
                              QLabel, QPushButton, QMessageBox)
 from PyQt5.QtCore import QThread, pyqtSignal
-# from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 import recursos_rc
 from PyQt5.QtGui import QPixmap
 
@@ -591,8 +592,9 @@ class Busqueda(QThread):
         todos_directorios.clear()
         num_archivos = 0
         numero_archivos = 0
+        estado = 0
         print(Back.BLUE + Fore.WHITE + Style.BRIGHT + f"""\n
-
+        
 
             Limpia archivos obsoletos de los directorios "media" dentro de la
          carpeta "ROMS", usando el gamelist.txt como guía para saber si se usa
