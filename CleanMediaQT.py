@@ -11,7 +11,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.3                                           *
+# *       CleanMediaQT.py  ver. 1.5                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
@@ -186,7 +186,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
    el archivo.
      Versión beta, haz una copia de seguridad antes de usar este programa
 
-     CleanMediaQT.py  ver. 1.3
+     CleanMediaQT.py  ver. 1.5
 
      Creado por Daniel Serrano   -   dani.eus79@gmail.com
 
@@ -251,151 +251,853 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
         os.chdir(directory)
         temp = os.path.basename(directory)
         fileImage = ""
-        if temp == "mame":
-            # print("\n base ", os.path.basename(directorioOriginal))
-            # print("\n original ", directorioOriginal)
-            self.labelPlataforma.setText("Mame")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "MAME.png"
-            # self.im = QPixmap(fileImage)
-            self.im = QPixmap(":/Plataformas/systemlogo/MAME.png")
 
-            self.labelImage2.setPixmap(self.im)
-
-        elif temp == "fba":
-            self.labelPlataforma.setText("Final Burn Alpha")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Final_Burn_Alpha.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/Final_Burn_Alpha.png")
-            # self.im = QPixmap(fileImage)
-            self.labelImage2.setPixmap(self.im)
-
-        elif temp == "nes":
-            self.labelPlataforma.setText("Nintendo Entertainment System")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Nintendo_Entertainment_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Nintendo_Entertainment_System.png")
-            # self.im = QPixmap(fileImage)
-            self.labelImage2.setPixmap(self.im)
-
-        elif temp == "sms":
-            self.labelPlataforma.setText("Sega Master System")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Sega_Master_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Sega_Master_System.png")
-            # self.im = QPixmap(fileImage)
-            self.labelImage2.setPixmap(self.im)
-
-        elif temp == "roms" or temp == "rom":
+        if temp == "roms" or temp == "rom":
             self.labelPlataforma.setText("Directorio Principal de las ROMs")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Attract_Mode_Setup.png"
+                "EmulationStation.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Attract_Mode_Setup.png")
+                              "EmulationStation.png")
             # self.im = QPixmap(fileImage)
-            self.labelImage2.setPixmap(self.im)
-
-        elif temp == "snes":
-            self.labelPlataforma.setText("Súper Nintendo")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Super_Nintendo_Entertainment_System.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Super_Nintendo_Entertainment_System.png")
-            # self.im = QPixmap(fileImage)
-            self.labelImage2.setPixmap(self.im)
-
-        elif temp == "megadrive":
-            self.labelPlataforma.setText("Megadrive")
-            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Sega_Mega_Drive.png"
-            self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Sega_Mega_Drive.png")
-            # self.im = QPixmap(fileImage)
-            self.labelImage2.setPixmap(self.im)
+            self.labelImage2.setPixmap(self.im)       
 
         elif temp == "3do":
             self.labelPlataforma.setText("3do Real Multiplayer")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Panasonic_3DO.png"
+                "3do.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Panasonic_3DO.png")
+                              "3do.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "amiga":
             self.labelPlataforma.setText("Amiga")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Commodore_Amiga.png"
+                "amiga.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Commodore_Amiga.png")
+                              "amiga.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "amigacd32":
+            self.labelPlataforma.setText("Amiga CD 32")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "amigacd32.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "amigacd32.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "amstradcpc":
             self.labelPlataforma.setText("Amstrad CPC")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Amstrad_CPC.png"
+                "amstradcpc.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Amstrad_CPC.png")
+                              "amstradcpc.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "apple2":
             self.labelPlataforma.setText("Apple 2")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Apple2.png"
+                "apple2.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Apple2.png")
+                              "apple2.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "arcade":
+            self.labelPlataforma.setText("Arcade")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "arcade.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "arcade.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "atari2600":
             self.labelPlataforma.setText("Atari 2600")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Atari_2600.png"
+                "atari2600.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Atari_2600.png")
+                              "atari2600.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "atari5200":
             self.labelPlataforma.setText("Atari 5200")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Atari_5200.png"
+                "atari5200.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Atari_5200.png")
+                              "atari5200.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "atari7800":
             self.labelPlataforma.setText("Atari 7800")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Atari_7800.png"
+                "atari7800.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Atari_7800.png")
+                              "atari7800.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "atarijaguar":
             self.labelPlataforma.setText("Atari Jaguar")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "Atari Jaguar.png"
+                "atarijaguar.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "Atari Jaguar.png")
+                              "atarijaguar.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "atarilynx":
+            self.labelPlataforma.setText("Atari Lynx")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "atarilynx.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "atarilynx.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "atarist":
+            self.labelPlataforma.setText("Atari ST")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "atarist.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "atarist.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "philipscdi":
+            self.labelPlataforma.setText("Philips CD-i")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "philipscdi.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "philipscdi.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "coco":
+            self.labelPlataforma.setText("Tandy Colour Computer")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "coco.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "coco.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
         elif temp == "colecovision":
             self.labelPlataforma.setText("Coleco Vision")
             fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
-                "ColecoVision.png"
+                "colecovision.png"
             self.im = QPixmap(":/Plataformas/systemlogo/"
-                              "ColecoVision.png")
+                              "colecovision.png")
             # self.im = QPixmap(fileImage)
             self.labelImage2.setPixmap(self.im)
 
+        elif temp == "c64":
+            self.labelPlataforma.setText("Commodore 64")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "c64.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "c64.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "daphne":
+            self.labelPlataforma.setText("Daphne")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "daphne.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "daphne.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "dragon32":
+            self.labelPlataforma.setText("Dragon 32")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "dragon32.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "dragon32.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "dreamcast":
+            self.labelPlataforma.setText("Dreamcast")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "dreamcast.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "dreamcast.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "fds":
+            self.labelPlataforma.setText("Famicom Disk System")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "fds.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "fds.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "famicom":
+            self.labelPlataforma.setText("Famicom")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "famicom.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "famicom.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "fba-libreto" or temp == "fba":
+            self.labelPlataforma.setText("Final Burn Alpha Libreto")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "fba.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/fba.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "gameandwatch":
+            self.labelPlataforma.setText("Game & Watch")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "gameandwatch.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/gameandwatch.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "gamegear":
+            self.labelPlataforma.setText("GameGear")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "gamegear.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/gamegear.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "gb":
+            self.labelPlataforma.setText("GameBoy")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "gb.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/gb.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "gba":
+            self.labelPlataforma.setText("GameBoy Advance")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "gba.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/gba.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "gbc":
+            self.labelPlataforma.setText("GameBoy Color")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "gbc.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/gbc.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "gc":
+            self.labelPlataforma.setText("Game Cube")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "gc.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/gc.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "megadrive":
+            self.labelPlataforma.setText("Megadrive")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "megadrive.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "megadrive.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "genesis":
+            self.labelPlataforma.setText("Sega Genesis")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "genesis.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "genesis.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "intellivision":
+            self.labelPlataforma.setText("Intellivision")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "intellivision.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "intellivision.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "lightgum":
+            self.labelPlataforma.setText("Light Gum")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "lightgum.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "lightgum.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "macintosh":
+            self.labelPlataforma.setText("Macintosh")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "macintosh.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "macintosh.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "mame":
+            self.labelPlataforma.setText("Mame")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "mame.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/mame.png")
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "mame-libreto":
+            self.labelPlataforma.setText("Mame Libreto")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "mame-libreto.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/mame-libreto.png")
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "mame4all":
+            self.labelPlataforma.setText("Mame4all")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "mame4all.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/mame4all.png")
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "mame-advmame":
+            self.labelPlataforma.setText("Mame Advance")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "mame-advmame.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/mame-advmame.png")
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "markiii":
+            self.labelPlataforma.setText("Sega Mark III")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "markiii.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/markiii.png")
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sms":
+            self.labelPlataforma.setText("Sega Master System")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sms.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sms.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "megacd":
+            self.labelPlataforma.setText("Sega Mega CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "megacd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "megacd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+            
+        elif temp == "megadrive-japan":
+            self.labelPlataforma.setText("Sega MegaDrive Japan")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "megadrive-japan.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "megadrive-japan.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "msx":
+            self.labelPlataforma.setText("MSX")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "msx.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "msx.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "msx2":
+            self.labelPlataforma.setText("MSX 2")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "msx2.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "msx2.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "n64":
+            self.labelPlataforma.setText("Nintendo 64")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "n64.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "n64.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "nds":
+            self.labelPlataforma.setText("Nintendo DS")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "nds.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "nds.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "neogeocd":
+            self.labelPlataforma.setText("NeoGeo CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "neogeocd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "neogeocd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "neogeo":
+            self.labelPlataforma.setText("NeoGeo")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "neogeo.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "neogeo.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "nes":
+            self.labelPlataforma.setText("Nintendo Entertainment System")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "nes.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "nes.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "ngp":
+            self.labelPlataforma.setText("NeoGeo Pocket")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "ngp.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "ngp.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "ngpc":
+            self.labelPlataforma.setText("NeoGeo Pocket Color")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "ngpc.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "ngpc.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "nintendobsx":
+            self.labelPlataforma.setText("Nintendo BSX")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "nintendobsx.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "nintendobsx.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "snes":
+            self.labelPlataforma.setText("Súper Nintendo")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "snes.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "snes.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "videopac":
+            self.labelPlataforma.setText("Magnavox Odyssey 2")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "videopac2.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "videopac2.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "oric":
+            self.labelPlataforma.setText("Oric")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "oric.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "oric.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "pc":
+            self.labelPlataforma.setText("PC Dos")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "pc.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "pc.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "pcengine":
+            self.labelPlataforma.setText("PCEngine")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "pcengine.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "pcengine.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "pcenginecd":
+            self.labelPlataforma.setText("PCEngine CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "pcenginecd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "pcenginecd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "pinball":
+            self.labelPlataforma.setText("Pinball")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "pinball.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "pinball.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "ports":
+            self.labelPlataforma.setText("Ports")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "ports.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "ports.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "ps2":
+            self.labelPlataforma.setText("Playstation 2")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "ps2.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "ps2.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "psx":
+            self.labelPlataforma.setText("Playstation")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "psx.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "psx.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "psp":
+            self.labelPlataforma.setText("Playstation Portable")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "psp.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "psp.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "pspminis":
+            self.labelPlataforma.setText("Playstation Portable Minis")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "pspminis.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "pspminis.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "residualvm":
+            self.labelPlataforma.setText("Residualvm")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "residualvm.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "residualvm.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "retropie":
+            self.labelPlataforma.setText("Retropie")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "retropie.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "retropie.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "saturn":
+            self.labelPlataforma.setText("Sega Saturn")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "saturn.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "saturn.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sc-3000":
+            self.labelPlataforma.setText("Sega SC-3000")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sc-3000.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sc-3999.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "scummvm":
+            self.labelPlataforma.setText("ScummVM")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "scummvm.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "scummvm.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sega32x":
+            self.labelPlataforma.setText("Sega 32x")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sega32x.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sega32x.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "segacd":
+            self.labelPlataforma.setText("Sega CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "segacd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "segacd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sfc":
+            self.labelPlataforma.setText("Super Famicon")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sfc.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sfc.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sg-1000":
+            self.labelPlataforma.setText("Sega SG-1000")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sg-1000.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sg-1000.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sgfx" or temp == "supergrafx":
+            self.labelPlataforma.setText("Super Grafx")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sgfx.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sgfx.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "shmups":
+            self.labelPlataforma.setText("Super Grafx")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "shmups.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "shmups.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "snescd":
+            self.labelPlataforma.setText("Super Nintendo CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "snescd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "snescd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "steam":
+            self.labelPlataforma.setText("Steam")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "steam.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "steam.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "sufami":
+            self.labelPlataforma.setText("Sufami Turbo")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "sufami.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "sufami.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "tectoy":
+            self.labelPlataforma.setText("Tectoy")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "tectoy.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "tectoy.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "tg16":
+            self.labelPlataforma.setText("TurboGrafx 16")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "tg16.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "tg16.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "tg16cd":
+            self.labelPlataforma.setText("TurboGrafx 16 CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "tg16cd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "tg16cd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "tg-cd":
+            self.labelPlataforma.setText("TurboGrafx 16 CD")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "tg16cd.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "tg16cd.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "ti99":
+            self.labelPlataforma.setText("Texas Instruments TI-99")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "ti99.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "ti99.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "trs-80":
+            self.labelPlataforma.setText("Trackball")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "trs-80.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "trs-80.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "vectrex":
+            self.labelPlataforma.setText("Vectrex")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "vectrex.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "vectrex.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "vi20":
+            self.labelPlataforma.setText("Commodore Vi-20")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "vi20.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "vi20.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "videopac" or temp == "videopac2":
+            self.labelPlataforma.setText("Magnavox Odyssey2")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "videopac2.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "videopac2.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "virtualboy":
+            self.labelPlataforma.setText("Nintendo VirtualBoy")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "virtualboy.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "virtualboy.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "wii":
+            self.labelPlataforma.setText("Nintendo WII")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "wii.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "wii.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "wiiu":
+            self.labelPlataforma.setText("Nintendo WIIU")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "wiiu.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "wiiu.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "wonderswan":
+            self.labelPlataforma.setText("WonderSwan")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "wonderswan.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "wonderswan.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "wonderswancolor":
+            self.labelPlataforma.setText("WonderSwan Color")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "wonderswancolor.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "wonderswancolor.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "x68000":
+            self.labelPlataforma.setText("Sharp X68000")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "x68000.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "x68000.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "zmachine":
+            self.labelPlataforma.setText("Infocom")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "zmachine.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "zmachine.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "zxspectrum":
+            self.labelPlataforma.setText("Sinclair ZX Spectrum")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "zxspectrum.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "zxspectrum.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
+
+        elif temp == "zx81":
+            self.labelPlataforma.setText("Sinclair ZX-81")
+            fileImage = directorioOriginal + os.sep + "systemlogo" + os.sep +\
+                "zx81.png"
+            self.im = QPixmap(":/Plataformas/systemlogo/"
+                              "zx81.png")
+            # self.im = QPixmap(fileImage)
+            self.labelImage2.setPixmap(self.im)
 
         if directory:
             # print("Directorio seleccionado: ", directory)
@@ -602,7 +1304,7 @@ class Busqueda(QThread):
 
           Versión beta, haz una copia de seguridad antes de usar este programa
 
-               CleanMediaQT.py  ver. 1.3
+               CleanMediaQT.py  ver. 1.5
 
             Creado por Daniel Serrano   -   dani.eus79@gmail.com
 
