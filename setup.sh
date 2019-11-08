@@ -1,6 +1,10 @@
 #! /bin/bash
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 @echo off
+=======
+echo off
+>>>>>>> Stashed changes
 =======
 echo off
 >>>>>>> Stashed changes
@@ -23,9 +27,14 @@ echo ........................
 echo \n
 echo \n 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 timeout /nobreak 03
 
 
+=======
+
+cd CleanMediaRomsQT
+>>>>>>> Stashed changes
 =======
 
 cd CleanMediaRomsQT
