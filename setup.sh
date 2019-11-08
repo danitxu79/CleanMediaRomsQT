@@ -1,5 +1,5 @@
 #! /bin/bash
-@echo off
+echo off
 echo \n
 echo Instalando requisitos
 echo .....................
@@ -18,8 +18,7 @@ echo Iniciando Clean Media QT
 echo ........................
 echo \n
 echo \n 
-timeout /nobreak 03
 
-
+cd CleanMediaRomsQT
 python ./CleanMediaQT.py
 conda deactivate
