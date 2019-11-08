@@ -11,7 +11,7 @@
 # *                                                                           *
 # *       Versión beta, haz una copia de seguridad antes de usar este programa*
 # *                                                                           *
-# *       CleanMediaQT.py  ver. 1.5                                           *
+# *       CleanMediaQT.py  ver. 2.0                                           *
 # *                                                                           *
 # *      Creado por Daniel Serrano   -   dani.eus79@gmail.com                 *
 # *                                                                           *
@@ -186,7 +186,7 @@ class mywindow(QtWidgets.QMainWindow, Ui_MainWindow):
    el archivo.
      Versión beta, haz una copia de seguridad antes de usar este programa
 
-     CleanMediaQT.py  ver. 1.5
+     CleanMediaQT.py  ver. 2.0
 
      Creado por Daniel Serrano   -   dani.eus79@gmail.com
 
@@ -1304,7 +1304,7 @@ class Busqueda(QThread):
 
           Versión beta, haz una copia de seguridad antes de usar este programa
 
-               CleanMediaQT.py  ver. 1.5
+               CleanMediaQT.py  ver. 2.0
 
             Creado por Daniel Serrano   -   dani.eus79@gmail.com
 
