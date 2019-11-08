@@ -1,13 +1,5 @@
 #! /bin/bash
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-@echo off
-=======
 echo off
->>>>>>> Stashed changes
-=======
-echo off
->>>>>>> Stashed changes
 echo \n
 echo Instalando requisitos
 echo .....................
@@ -26,18 +18,7 @@ echo Iniciando Clean Media QT
 echo ........................
 echo \n
 echo \n 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-timeout /nobreak 03
-
-
-=======
 
 cd CleanMediaRomsQT
->>>>>>> Stashed changes
-=======
-
-cd CleanMediaRomsQT
->>>>>>> Stashed changes
 python ./CleanMediaQT.py
 conda deactivate
