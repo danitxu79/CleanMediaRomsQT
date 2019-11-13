@@ -62,8 +62,6 @@ cp CleanManagerQT,png "$RPEMU/images"
 echo #! /bin/bash >> "$RPMENU/CleanManagerQT.sh"
 echo sh \\..\..\CleanManagerQT\launcher.sh >> "$RPMENU/CleanManagerQT.SH"
 
-
-
 echo \n 
 echo Iniciando Clean Media QT
 echo ........................
